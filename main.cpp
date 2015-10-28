@@ -33,75 +33,51 @@
 char *items[100]; // store item names
 int value[100]; // store item value
 int weight[100]; // store item weight
-char *sack[100]; // the stolen items
-int total; // total value of items
 
 /* Iterators */
 int k = 0;
-int ss = 0;
+int s = 0;
 
 /* Variables */
 int ELEMENTS = 0;
-int ssk;
 
 /* Constants */
 static const int MAX_WEIGHT = 400; // how much the knapsack can hold
 
-void read(void)
-{
-	FILE *data = fopen("data.txt", "r");
+void read(void) {
+    FILE *data = fopen("data.txt", "r");
 
-	if (data != NULL)
-	{
-		char line[256]; // sets max line length to 256
-		while (fgets(line, sizeof line, data) != NULL)
-		{
-			// WARNINGS: this will break if the data file has more than
-			// one space between each section and this will also break if
-			// the correct format of NAME VALUE WEIGHT is not followed
+    if (data != NULL) {
+        char line[256]; // sets max line length to 256
+        while (fgets(line, sizeof line, data) != NULL) {
+            // WARNINGS: this will break if the correct format of NAME VALUE WEIGHT is not followed
 
-			items[k] = strdup(strtok(line, " "));
-			value[k] = atoi(strtok(NULL, " "));
-			weight[k] = atoi(strtok(NULL, " "));
+            items[k] = strdup(strtok(line, " "));
+            value[k] = atoi(strtok(NULL, " "));
+            weight[k] = atoi(strtok(NULL, " "));
 
-			k++;
-		}
+            k++;
+        }
 
-		fclose(data); // close file
-	}
+        fclose(data); // close file
+    }
 
-	else
-	{
-		printf("Error reading file, check to make sure it is not locked and that it exists.");
-	}
+    else {
+        fprintf(stderr, "Error reading file, check to make sure it is not locked and that it exists.");
+    }
 
-	ELEMENTS = k;
+    ELEMENTS = k;
 }
 
-void printitems(void)
-{
-	ssk = sizeof(sack)/sizeof(int);
-
-	printf("\n\nItems in knapsack: ");
-
-	for (ss = 0; ss < ssk; ss++)
-	{
-		if (ss == ssk)
-		{
-			printf("%s. Total value of sack: %d", sack[ss], total);
-		}
-
-		else
-		{
-			printf("%s, ", sack[ss]);
-		}
-	}
+void printItems(void) {
+    for (s = 0; s < ELEMENTS; s++) {
+        printf("Name: %s, Value: %d, Weight: %d\n", items[s], value[s], weight[s]);
+    }
 }
 
-int main( void )
-{
-	read();
-	printitems();
+int main(void) {
+    read();
+    printItems();
 
-	return 0;
+    return 0;
 }

@@ -7,7 +7,7 @@ using namespace std;
 const int ELEMENTS = 5;
 
 
-unsigned int factorial(unsigned int n) 
+unsigned int factorial(unsigned int n)
 {
     if (n == 0)
     {
@@ -19,15 +19,14 @@ unsigned int factorial(unsigned int n)
 int main()
 {
 	printf("Program is starting...\n");
-	
+
 	int item[ELEMENTS] = {1, 1, 0, 0, 0};
 	int numperms = factorial(ELEMENTS);
-	
+
 	printf("Total possible permutations: %d\n", numperms);
-	//int permutations[numperms];
-	
+
 	sort (item,item+ELEMENTS);
-	
+
 	do
 	{
 		printf("%d, %d, %d, %d, %d\n",item[0], item[1], item[2], item[3], item[4]);
