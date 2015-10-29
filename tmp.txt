@@ -21,10 +21,14 @@ for (int i = 0; i < numPerms; i++)
 		int temp = atoi(array[i].getNextChar()); // i.e. if number is 010011 we want 0 then 1 then 0 then 0 etc.
 		if (temp == 1) // 0 don't take, 1 do take
 		{
-			if (weight[j] < weightTaken)
+			if ((weight[j] + weightTaken) < MAX_WEIGHT)
 			{
 				weightTaken += weight[j];
 				valueTaken += values[j];
+			}
+			else
+			{
+				// break the while loop
 			}
 		}
 	}
