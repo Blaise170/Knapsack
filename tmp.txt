@@ -1,4 +1,6 @@
-Pseudo code is roughly:
+===========
+Pseudo Code
+===========
 
 // We set our binary function to add to an array of strings.
 // We need to check all of the permutations since isomorphism does not exist for this set
