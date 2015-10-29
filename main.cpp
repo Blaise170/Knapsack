@@ -28,23 +28,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+#include <inttypes.h>
+
+using namespace std;
 
 /* Arrays */
 char *items[100]; // store item names
 int value[100]; // store item value
 int weight[100]; // store item weight
 
-/* Iterators */
-int k = 0;
-int s = 0;
-
 /* Variables */
-int ELEMENTS = 0;
+int ELEMENTS;
 
 /* Constants */
+static const int ITEMS_AVAILABLE = 10; // how many items are available to steal
 static const int MAX_WEIGHT = 400; // how much the knapsack can hold
 
 void read(void) {
+    int k = 0;
     FILE *data = fopen("data.txt", "r");
 
     if (data != NULL) {
@@ -70,14 +72,39 @@ void read(void) {
 }
 
 void printItems(void) {
+    int s;
     for (s = 0; s < ELEMENTS; s++) {
         printf("Name: %s, Value: %d, Weight: %d\n", items[s], value[s], weight[s]);
     }
+    printf("\n");
+}
+
+unsigned long long int factorial(int n) {
+    // Range: 0 to 18,446,744,073,709,551,615
+    // Outside of range returns 0
+    // Maximum elements: 51
+
+    if (n == 0) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+int bin(void) {
+    printf("Permutations function is starting...\n");
+
+
+    return 0;
 }
 
 int main(void) {
     read();
     printItems();
+
+    unsigned long long int numPerms = factorial(ELEMENTS);
+    printf("Total possible permutations: %llu\n", numPerms);
+
+    bin();
 
     return 0;
 }

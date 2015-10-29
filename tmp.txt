@@ -1,0 +1,37 @@
+Pseudo code is roughly:
+
+// We set our binary function to add to an array of strings.
+// We need to check all of the permutations since isomorphism does not exist for this set
+**char array[numPerms]; // the array will be as large as the number of potential permutations
+
+int bestValue = 0;
+*char bestKnapsack[1000];
+
+for (int i = 0; i < numPerms; i++)
+{
+	int weightTaken = 0;
+	int valueTaken = 0;
+	int j = 0;
+
+	while (j < ELEMENTS)
+	{
+		j++;
+		int temp = atoi(array[i].getNextChar()); // i.e. if number is 010011 we want 0 then 1 then 0 then 0 etc.
+		if (temp == 1) // 0 don't take, 1 do take
+		{
+			if (weight[j] < weightTaken)
+			{
+				weightTaken += weight[j];
+				valueTaken += values[j];
+			}
+		}
+	}
+
+	if (valueTaken > bestValue)
+	{
+		printf("array[i] is better...");
+		bestKnapsack = array[i];
+		bestValue = valueTaken;
+	}
+
+}

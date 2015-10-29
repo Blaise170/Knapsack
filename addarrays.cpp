@@ -1,36 +1,19 @@
+#define LENGTH 12
+
 #include <stdio.h>
-#include <iostream>
-#include <algorithm>
-using namespace std;
 
-/* Constants */
-const int ELEMENTS = 5;
-
-
-unsigned int factorial(unsigned int n)
+void print_binary(int n)
 {
-    if (n == 0)
-    {
-       return 1;
-	}
-    return n * factorial(n - 1);
+    int bit = 1 << LENGTH - 1;
+    while (bit) {
+        printf("%d", n & bit ? 1 : 0);
+        bit >>= 1;
+    }
+    printf("\n");
 }
 
-int main()
-{
-	printf("Program is starting...\n");
-
-	int item[ELEMENTS] = {1, 1, 0, 0, 0};
-	int numperms = factorial(ELEMENTS);
-
-	printf("Total possible permutations: %d\n", numperms);
-
-	sort (item,item+ELEMENTS);
-
-	do
-	{
-		printf("%d, %d, %d, %d, %d\n",item[0], item[1], item[2], item[3], item[4]);
-	} while ( next_permutation(item,item+ELEMENTS) );
-
-	return 0;
+int main() {
+    int n = 1 << LENGTH, i;
+    for (i = 0; i < n; i++)
+        print_binary(i);
 }
