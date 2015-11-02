@@ -34,46 +34,48 @@
 using namespace std;
 
 /* Arrays */
-char *items[100]; // store item names
-int value[100]; // store item value
-int weight[100]; // store item weight
+int value[50]; // store item value
+int weight[50]; // store item weight
+char *items[50]; // store item names
+char *binNums[50]; // store all of the binary strings
 
-/* Variables */
-int ELEMENTS;
 
-/* Constants */
-static const int ITEMS_AVAILABLE = 10; // how many items are available to steal
-static const int MAX_WEIGHT = 400; // how much the knapsack can hold
+// data set is no larger than 50 items, so arrays only need to hold a max of 50 elements
 
-void read(void) {
-    int k = 0;
-    FILE *data = fopen("data.txt", "r");
+/* Values */
+static const int ITEMS_AVAILABLE = 50; // how many items we are testing from the data set this run
+static const int MAX_WEIGHT = 400; // how much weight the knapsack can hold this run
+int bestValue; // stores the best value for a knapsack
+char bestKnapsack[50]; // store string for best binary string knapsack possible
+
+void read() {
+    int k = 0; // iterator
+    FILE *data = fopen("data.txt", "r"); // opens data file
 
     if (data != NULL) {
         char line[256]; // sets max line length to 256
-        while (fgets(line, sizeof line, data) != NULL) {
+        while (fgets(line, sizeof line, data) != NULL && k < ITEMS_AVAILABLE) {
             // WARNINGS: this will break if the correct format of NAME VALUE WEIGHT is not followed
 
-            items[k] = strdup(strtok(line, " "));
-            value[k] = atoi(strtok(NULL, " "));
-            weight[k] = atoi(strtok(NULL, " "));
+            items[k] = strdup(strtok(line, " ")); // takes the first token from line and assigns to array of items
+            value[k] = atoi(strtok(NULL, " ")); // converts second token to int and assigns to array of values
+            weight[k] = atoi(strtok(NULL, " ")); // converts last token to int and assigns to array of weight
 
-            k++;
+            k++; // iterates
         }
 
         fclose(data); // close file
     }
 
     else {
+        // problems with the file location are most likely to produce errors
         fprintf(stderr, "Error reading file, check to make sure it is not locked and that it exists.");
     }
-
-    ELEMENTS = k;
 }
 
-void printItems(void) {
+void printItems() {
     int s;
-    for (s = 0; s < ELEMENTS; s++) {
+    for (s = 0; s < ITEMS_AVAILABLE; s++) {
         printf("Name: %s, Value: %d, Weight: %d\n", items[s], value[s], weight[s]);
     }
     printf("\n");
@@ -90,21 +92,49 @@ unsigned long long int factorial(int n) {
     return n * factorial(n - 1);
 }
 
-int bin(void) {
-    printf("Permutations function is starting...\n");
+int main() {
+    int i;
 
+    read(); // reads in file
+    printItems(); // prints out the file
 
-    return 0;
-}
-
-int main(void) {
-    read();
-    printItems();
-
-    unsigned long long int numPerms = factorial(ELEMENTS);
+    unsigned long long int numPerms = factorial(ITEMS_AVAILABLE); // stores the number of different combinations
     printf("Total possible permutations: %llu\n", numPerms);
+    char *permutations[numPerms]; // holds all of the different strings
 
-    bin();
+/*
+    for (i = 0; i < numPerms; i++)
+    {
+        int weightTaken = 0;
+        int valueTaken = 0;
+        int j = 0;
 
+        while (j < ITEMS_AVAILABLE)
+        {
+            j++;
+            int temp = atoi(array[i].getNextChar()); // i.e. if number is 010011 we want 0 then 1 then 0 then 0 etc.
+            if (temp == 1) // 0 don't take, 1 do take
+            {
+                if ((weight[j] + weightTaken) < MAX_WEIGHT)
+                {
+                    weightTaken += weight[j];
+                    valueTaken += values[j];
+                }
+                else
+                {
+                    // break the while loop
+                }
+            }
+        }
+
+        if (valueTaken > bestValue)
+        {
+            printf("array[i] is better...");
+            bestKnapsack[0] = array[i];
+            bestValue = valueTaken;
+        }
+
+    }
+*/
     return 0;
 }
