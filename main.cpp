@@ -48,6 +48,7 @@ static const int MAX_WEIGHT = 400; // how much weight the knapsack can hold this
 int bestValue; // stores the best value for a knapsack
 char bestKnapsack[50]; // store string for best binary string knapsack possible
 
+//
 void read() {
     int k = 0; // iterator
     FILE *data = fopen("data.txt", "r"); // opens data file
@@ -73,6 +74,7 @@ void read() {
     }
 }
 
+// Function designed to check for file read integrity
 void printItems() {
     int s;
     for (s = 0; s < ITEMS_AVAILABLE; s++) {
@@ -81,6 +83,7 @@ void printItems() {
     printf("\n");
 }
 
+// Solves number of permutations by using recursive factorial
 unsigned long long int factorial(int n) {
     // Range: 0 to 18,446,744,073,709,551,615
     // Outside of range returns 0
