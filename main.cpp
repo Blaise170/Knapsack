@@ -35,7 +35,7 @@
 using namespace std;
 
 /* Values */
-static const int ITEMS_AVAILABLE = 30; // how many items we are testing from the data set this run
+static const int ITEMS_AVAILABLE = 5; // how many items we are testing from the data set this run
 static const int MAX_WEIGHT = 100; // how much weight the knapsack can hold this run
 
 /* Arrays */
@@ -58,7 +58,7 @@ void read() {
             value[k] = atoi(strtok(NULL, " ")); // converts second token to int and assigns to array of values
             weight[k] = atoi(strtok(NULL, " ")); // converts last token to int and assigns to array of weight
 
-            k++; // iterates
+            k++;
         }
 
         fclose(data); // close file
@@ -74,6 +74,7 @@ void read() {
 void printItems() {
     int s;
     for (s = 0; s < ITEMS_AVAILABLE; s++) {
+        // prints out each line of the data file
         printf("Name: %s, Value: %d, Weight: %d\n", items[s], value[s], weight[s]);
     }
     printf("\n");
@@ -90,9 +91,11 @@ unsigned long long int permutations(int n) {
 
 // Gives all permutations of binary for a given length
 void bin(unsigned long long int n) {
+    // index can be a short as ITEMS_AVAILABLE will not exceed 50
     short index = 0;
     unsigned long long int bit = 1 << ITEMS_AVAILABLE - 1;
 
+    // bit shifting
     while (bit) {
         unsigned long long int k = (n & bit ? 1 : 0);
         bit >>= 1;
@@ -104,31 +107,35 @@ void bin(unsigned long long int n) {
 int main() {
 
     read(); // reads in file
-    //printItems(); // prints out the file
 
     unsigned long long int p = permutations(ITEMS_AVAILABLE); // stores the total binary numbers
-    //printf("Total possible permutations: %llu\n", p);
     unsigned long long int i; // allows for iteration up to p
 
-    int bestValue = 0;
-    unsigned long long int bestValueItems[ITEMS_AVAILABLE];
+    int bestValue = 0; // stores best possible knapsack value
+    unsigned long long int bestValueItems[ITEMS_AVAILABLE]; // stores best possible knapsack binary
 
-    printf("Please wait, items are now being checked...\n");
+    printf("Please wait, items are now being checked...\n"); // after ITEMS_AVAILABLE > 25 or so, takes awhile to finish
 
     for (i = 0; i < p; i++) {
-        int weightTaken = 0;
-        int valueTaken = 0;
+        int weightTaken = 0; // stores weight for each possible knapsack
+        int valueTaken = 0;// stores total value for each possible knapsack
+        char check = 0; // checks whether knapsack weighs too much
         int j = 0;
-        int check = 0;
 
         bin(i);
 
         while (j < (ITEMS_AVAILABLE - 1)) {
+
+            // if binary[j] == 1, we are taking the item
             if (binary[j] > 0) {
+
+                // checks to make sure knapsack is not too heavy
                 if ((weight[j] + weightTaken) < MAX_WEIGHT) {
-                    weightTaken += weight[j];
-                    valueTaken += value[j];
+                    weightTaken += weight[j]; // adds to weight
+                    valueTaken += value[j]; // adds to value
                 }
+
+                    // otherwise we'll set the check bit
                 else {
                     check = 1;
                     break;
@@ -137,8 +144,9 @@ int main() {
             j++;
         }
 
-        int q = 0;
+        short q = 0; // will never be greater than ITEMS_AVAILABLE, in this case 50
 
+        // checks to make sure that the knapsack isn't too heavy before setting a new best
         if (check != 1) {
             if (valueTaken > bestValue) {
                 bestValue = valueTaken;
@@ -152,6 +160,7 @@ int main() {
     printf("\nThe best value available to take is: %d\n", bestValue);
     printf("In order to achieve this value, you need must take: ");
 
+    // prints out the items you should take to get the best value
     int k = 0;
     while (k < (ITEMS_AVAILABLE)) {
         if (bestValueItems[k] > 0) {
