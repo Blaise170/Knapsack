@@ -30,23 +30,21 @@
 #include <string.h>
 #include <iostream>
 #include <inttypes.h>
+#include <math.h>
 
 using namespace std;
 
-/* Arrays */
-int value[50]; // store item value
-int weight[50]; // store item weight
-char *items[50]; // store item names
-char *binNums[50]; // store all of the binary strings
-
-
-// data set is no larger than 50 items, so arrays only need to hold a max of 50 elements
-
 /* Values */
-static const int ITEMS_AVAILABLE = 50; // how many items we are testing from the data set this run
+static const int ITEMS_AVAILABLE = 10; // how many items we are testing from the data set this run
 static const int MAX_WEIGHT = 400; // how much weight the knapsack can hold this run
 int bestValue; // stores the best value for a knapsack
 char bestKnapsack[50]; // store string for best binary string knapsack possible
+
+/* Arrays */
+int value[ITEMS_AVAILABLE]; // store item value
+int weight[ITEMS_AVAILABLE]; // store item weight
+char *items[ITEMS_AVAILABLE]; // store item names
+unsigned long long int binary[ITEMS_AVAILABLE]; // stores the binary permutations
 
 //
 void read() {
@@ -83,53 +81,65 @@ void printItems() {
     printf("\n");
 }
 
-// Solves number of permutations by using recursive factorial
-unsigned long long int factorial(int n) {
-    // Range: 0 to 18,446,744,073,709,551,615
-    // Outside of range returns 0
-    // Maximum elements: 51
+// Solves number of permutations
+unsigned long long int permutations(int n) {
 
-    if (n == 0) {
-        return 1;
+    // the power function normally returns a float, but the solutions will never be floating point
+    unsigned long long int r = pow(2.0, n);
+    return r;
+
+}
+
+// Gives all permutations of binary for a given length
+void bin(unsigned long long int n) {
+    short index = 0;
+    unsigned long long int bit = 1 << ITEMS_AVAILABLE - 1;
+
+    while (bit) {
+        unsigned long long int k = (n & bit ? 1 : 0);
+        bit >>= 1;
+        binary[index] = k;
+        index++;
     }
-    return n * factorial(n - 1);
 }
 
 int main() {
-    int i;
 
     read(); // reads in file
     printItems(); // prints out the file
 
-    unsigned long long int numPerms = factorial(ITEMS_AVAILABLE); // stores the number of different combinations
-    printf("Total possible permutations: %llu\n", numPerms);
-    char *permutations[numPerms]; // holds all of the different strings
+    unsigned long long int p = permutations(ITEMS_AVAILABLE); // stores the total binary numbers
+    printf("Total possible permutations: %llu\n", p);
+    unsigned long long int i; // allows for iteration up to p
 
-/*
-    for (i = 0; i < numPerms; i++)
-    {
+    for (i = 0; i < p; i++) {
         int weightTaken = 0;
         int valueTaken = 0;
         int j = 0;
+        int check = 0;
 
-        while (j < ITEMS_AVAILABLE)
-        {
-            j++;
-            int temp = atoi(array[i].getNextChar()); // i.e. if number is 010011 we want 0 then 1 then 0 then 0 etc.
-            if (temp == 1) // 0 don't take, 1 do take
-            {
-                if ((weight[j] + weightTaken) < MAX_WEIGHT)
-                {
+        bin(i);
+
+        while (j < ITEMS_AVAILABLE) {
+            if (binary[j] > 0) {
+                if ((weight[j] + weightTaken) < MAX_WEIGHT) {
                     weightTaken += weight[j];
-                    valueTaken += values[j];
+                    valueTaken += value[j];
                 }
-                else
-                {
-                    // break the while loop
+                else {
+                    check = 1;
+                    break;
                 }
             }
+            j++;
         }
 
+        if (check != 1) {
+
+        }
+    }
+
+/*
         if (valueTaken > bestValue)
         {
             printf("array[i] is better...");

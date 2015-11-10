@@ -1,5 +1,5 @@
-#define LENGTH 3
-#define MAX_ITEMS 7
+#define LENGTH 5
+#define MAX_ITEMS 70
 
 #include <stdio.h>
 
@@ -13,13 +13,11 @@
 111
 */
 
-void print_binary(int n) {
+void bin(int n) {
     int index = 0;
     int arr[MAX_ITEMS];
-
-    // Bit premise
     int bit = 1 << LENGTH - 1;
-    //While bit
+
     while (bit) {
         int k = (n & bit ? 1 : 0);
         bit >>= 1;
@@ -36,6 +34,7 @@ void print_binary(int n) {
 
 int main() {
     int n = (1 << LENGTH), i;
-    for (i = 0; i < n; i++)
-        print_binary(i);
+    for (i = 0; i < n; i++) {
+        bin(i);
+    }
 }
