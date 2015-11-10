@@ -35,10 +35,8 @@
 using namespace std;
 
 /* Values */
-static const int ITEMS_AVAILABLE = 10; // how many items we are testing from the data set this run
-static const int MAX_WEIGHT = 400; // how much weight the knapsack can hold this run
-int bestValue; // stores the best value for a knapsack
-char bestKnapsack[50]; // store string for best binary string knapsack possible
+static const int ITEMS_AVAILABLE = 30; // how many items we are testing from the data set this run
+static const int MAX_WEIGHT = 100; // how much weight the knapsack can hold this run
 
 /* Arrays */
 int value[ITEMS_AVAILABLE]; // store item value
@@ -106,11 +104,16 @@ void bin(unsigned long long int n) {
 int main() {
 
     read(); // reads in file
-    printItems(); // prints out the file
+    //printItems(); // prints out the file
 
     unsigned long long int p = permutations(ITEMS_AVAILABLE); // stores the total binary numbers
-    printf("Total possible permutations: %llu\n", p);
+    //printf("Total possible permutations: %llu\n", p);
     unsigned long long int i; // allows for iteration up to p
+
+    int bestValue = 0;
+    unsigned long long int bestValueItems[ITEMS_AVAILABLE];
+
+    printf("Please wait, items are now being checked...\n");
 
     for (i = 0; i < p; i++) {
         int weightTaken = 0;
@@ -120,7 +123,7 @@ int main() {
 
         bin(i);
 
-        while (j < ITEMS_AVAILABLE) {
+        while (j < (ITEMS_AVAILABLE - 1)) {
             if (binary[j] > 0) {
                 if ((weight[j] + weightTaken) < MAX_WEIGHT) {
                     weightTaken += weight[j];
@@ -134,20 +137,29 @@ int main() {
             j++;
         }
 
+        int q = 0;
+
         if (check != 1) {
-
+            if (valueTaken > bestValue) {
+                bestValue = valueTaken;
+                for (q = 0; q < ITEMS_AVAILABLE; q++) {
+                    bestValueItems[q] = binary[q];
+                }
+            }
         }
     }
 
-/*
-        if (valueTaken > bestValue)
-        {
-            printf("array[i] is better...");
-            bestKnapsack[0] = array[i];
-            bestValue = valueTaken;
+    printf("\nThe best value available to take is: %d\n", bestValue);
+    printf("In order to achieve this value, you need must take: ");
+
+    int k = 0;
+    while (k < (ITEMS_AVAILABLE)) {
+        if (bestValueItems[k] > 0) {
+            printf("%s ", items[k]);
         }
 
+        k++;
     }
-*/
+
     return 0;
 }
