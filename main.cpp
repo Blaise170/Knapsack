@@ -119,7 +119,7 @@ int main() {
     for (i = 0; i < p; i++) {
         int weightTaken = 0; // stores weight for each possible knapsack
         int valueTaken = 0;// stores total value for each possible knapsack
-        char check = 0; // checks whether knapsack weighs too much
+        short check = 0; // checks whether knapsack weighs too much
         int j = 0;
 
         bin(i);
