@@ -53,7 +53,7 @@ void read() {
     if (data != NULL) {
         char line[256]; // sets max line length to 256
         while (fgets(line, sizeof line, data) != NULL && k < ITEMS_AVAILABLE) {
-        // WARNINGS: this will break if the correct format of NAME VALUE WEIGHT is not followed
+            // WARNINGS: this will break if the correct format of NAME VALUE WEIGHT is not followed
 
             items[k] = strdup(strtok(line, " ")); // takes the first token from line and assigns to array of items
             value[k] = atoi(strtok(NULL, " ")); // converts second token to int and assigns to array of values
@@ -105,15 +105,13 @@ void bin(unsigned long long int n) {
     }
 }
 
-void init(unsigned long long int array[])
-{
+void init(unsigned long long int array[]) {
     int x;
     int arraysize = 32;
 
-    for (x = 0; x < arraysize; x++)
-    {
-	array[x] = 0;
-    }	
+    for (x = 0; x < arraysize; x++) {
+        array[x] = 0;
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -146,8 +144,8 @@ int main(int argc, char *argv[]) {
     unsigned long long int p = permutations(ITEMS_AVAILABLE); // stores the total binary numbers
     unsigned long long int i; // allows for iteration up to p
     unsigned long long int bestValueItems[ITEMS_AVAILABLE]; // stores best possible knapsack binary
-    unsigned long long int numStart = rank * (p/size);
-    unsigned long long int numEnd = (rank+1) * (p/size);
+    unsigned long long int numStart = rank * (p / size);
+    unsigned long long int numEnd = (rank + 1) * (p / size);
     int bestValue = 0; // stores best possible knapsack value
 
     printf("Please wait, items are now being checked...\n"); // after ITEMS_AVAILABLE > 25 or so, takes awhile to finish
@@ -185,10 +183,10 @@ int main(int argc, char *argv[]) {
         if (check != 1) {
             if (valueTaken > bestValue) {
                 bestValue = valueTaken;
-            	bestIndex = index;
-		process_index[0] = bestValue;
-		process_index[1] = bestIndex;
-	    }
+                bestIndex = index;
+                process_index[0] = bestValue;
+                process_index[1] = bestIndex;
+            }
         }
     }
 
@@ -196,36 +194,31 @@ int main(int argc, char *argv[]) {
     MPI_Gather(&process_index, 2, MPI_UNSIGNED_LONG_LONG, &rcv, 2, MPI_UNSIGNED_LONG_LONG, 0, MPI_COMM_WORLD);
     MPI_Barrier(MPI_COMM_WORLD);
 
-    if (rank == 0)
-    {
-	int sizex = size*2;
-	int allBestValue = 0;
-	int allBestIndex = 0;
+    if (rank == 0) {
+        int sizex = size * 2;
+        int allBestValue = 0;
+        int allBestIndex = 0;
 
-	for (int k = 0; k < sizex; k+=2)
-	{
-	    if (rcv[k] > allBestValue)
-	    {
-		allBestValue = rcv[k];
-		allBestIndex = rcv[k+1];
-	    }
-	}
+        for (int k = 0; k < sizex; k += 2) {
+            if (rcv[k] > allBestValue) {
+                allBestValue = rcv[k];
+                allBestIndex = rcv[k + 1];
+            }
+        }
 
-	bin(allBestIndex);
+        bin(allBestIndex);
 
-	int kk;
-	printf("The best items to take are: ");
-	while (kk < ITEMS_AVAILABLE)
-	{
-	    if (binary[kk] == 1)
-	    {
-		printf("%s ", items[kk]);
-	    }
-	
-	    kk++;
-	}
+        int kk;
+        printf("The best items to take are: ");
+        while (kk < ITEMS_AVAILABLE) {
+            if (binary[kk] == 1) {
+                printf("%s ", items[kk]);
+            }
 
-	printf("\nThese items will give a final value of %d.\n", allBestValue);
+            kk++;
+        }
+
+        printf("\nThese items will give a final value of %d.\n", allBestValue);
 
     }
 
